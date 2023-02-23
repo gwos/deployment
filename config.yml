@@ -1,0 +1,5 @@
+version: master
+
+docker:
+  user: admin
+  password: admin

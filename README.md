@@ -24,9 +24,14 @@ $ ./install.sh
 #### config.yml example:
 
 ```yaml
-version: 8.5.2
-
 docker:
   user: admin
   password: admin
+
+gw8:
+  tag: master
+  image: groundworkdevelopment/gw8
+  instance_name: localhost
+  parent_instance_name:
+  child_instance_name:
 ```

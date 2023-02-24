@@ -5,6 +5,7 @@ DOCKER_USER=
 DOCKER_PASSWORD=
 GW8_INSTANCE_NAME=
 GW8_IMAGE=
+ADDS=
 
 __parse_config_yaml() {
   local prefix=$2
@@ -150,6 +151,12 @@ __extract_gw8_image() {
     exit 1
   fi
 
+  for fname in ./config/*; do
+    if [ -s "$fname" ]; then
+      ADDS=$ADDS" -v \"$PWD/config/$fname:/src/config/$fname\" "
+    fi
+  done
+
   if ! docker run \
     -e GW8_INSTANCE_NAME="$GW8_INSTANCE_NAME" \
     -e PARENT_INSTANCE_NAME="$PARENT_INSTANCE_NAME" \
@@ -157,6 +164,7 @@ __extract_gw8_image() {
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v "${HOME}"/.docker:/root/.docker \
     -v /tmp:/tmp/tmp \
+    "${ADDS}" \
     --name gw8 "${GW8_IMAGE}:${TAG}" /src/docker_cmd.sh; then
     echo "GroundWork 8 Installation FAILED"
     exit 1

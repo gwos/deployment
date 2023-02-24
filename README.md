@@ -1,4 +1,4 @@
-# GW8 Installer
+# GW8 Deployment
 
 ### Usage:
 
@@ -16,9 +16,15 @@ $ ./install.sh
 #### Parameters from the config.yml file:
 
 ```
-    • version - GW8 version you want to install/update
-    • docker.user - DockerHub username to pull necessary images 
-    • docker.password - DockerHub password to pull necessary images 
+    • gw8.tag - GW8 version you want to install/update                                  ! required
+    • gw8.image - name of the installation image                                        ! required
+    • gw8.instance_name - name of the GW8 instance                                      ! required
+    • gw8.parent_instance_name - name of the GW8 parent (for PMC installation only)
+    • gw8.parent_instance_name - name of the GW8 instance (for PMC installation only)
+    • gw8.timezone - timezone to use for GW8 instance
+    
+    • docker.user - DockerHub username to pull necessary images                         ! required
+    • docker.password - DockerHub password to pull necessary images                     ! required
 ```
 
 #### config.yml example:
@@ -34,4 +40,10 @@ gw8:
   instance_name: localhost
   parent_instance_name:
   child_instance_name:
+  timezone: America/Denver
 ```
+
+#### Overrides
+
+To override any of the ULG files (/usr/local/groundwork/config), simply place them in the config directory. For example:
+ldap.properties

@@ -51,6 +51,10 @@ __check_environment() {
   fi
 }
 
+__version() {
+  echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'
+}
+
 __load_alpine() {
   ## quick tests for failing with separate alpine image before long full load
   if [ -z "$SKIP_ALPINE" ]; then
@@ -132,6 +136,7 @@ __set_variables() {
   fi
   GW8_IMAGE=$gw8_image
 
+  GW8_TZ=$gw8_timezone
   PARENT_INSTANCE_NAME=$gw8_parent_instance_name
   CHILD_INSTANCE_NAME=$gw8_child_instance_name
 }
@@ -145,26 +150,28 @@ __pull_gw8_image() {
 }
 
 __extract_gw8_image() {
+  for fname in ./config/*; do
+    if [ -s "$fname" ]; then
+      fname=$(basename $fname)
+      ADDS="${ADDS} -v $PWD/config/$fname:/src/config/$fname "
+    fi
+  done
+
   mkdir gw8
   if ! cd gw8; then
     echo "gw8 directory doesn't exist"
     exit 1
   fi
 
-  for fname in ./config/*; do
-    if [ -s "$fname" ]; then
-      ADDS=$ADDS" -v \"$PWD/config/$fname:/src/config/$fname\" "
-    fi
-  done
-
   if ! docker run \
     -e GW8_INSTANCE_NAME="$GW8_INSTANCE_NAME" \
     -e PARENT_INSTANCE_NAME="$PARENT_INSTANCE_NAME" \
     -e CHILD_INSTANCE_NAME="$CHILD_INSTANCE_NAME" \
+    -e GW8_TZ="$GW8_TZ" \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v "${HOME}"/.docker:/root/.docker \
     -v /tmp:/tmp/tmp \
-    "${ADDS}" \
+    $ADDS \
     --name gw8 "${GW8_IMAGE}:${TAG}" /src/docker_cmd.sh; then
     echo "GroundWork 8 Installation FAILED"
     exit 1
@@ -183,7 +190,7 @@ __extract_gw8_image() {
   docker rm gw8
 
   if [ -f "gw8.env" ]; then
-    cmd gw8.env | sed -e '/^\s*TZ\s*=/s/TZ/GW8_TZ/' >gw8.env.updated
+    cat gw8.env | sed -e '/^\s*TZ\s*=/s/TZ/GW8_TZ/' >gw8.env.updated
     mv -f gw8.env.updated gw8.env
     rm -f gw8.env.updated
   fi
@@ -196,6 +203,7 @@ __check_environment
 eval "$(__parse_config_yaml config.yml)"
 __set_variables
 __docker_login
+__load_alpine
 __pull_gw8_image
 __extract_gw8_image
 

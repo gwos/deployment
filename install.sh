@@ -5,6 +5,7 @@ DOCKER_USER=
 DOCKER_PASSWORD=
 GW8_INSTANCE_NAME=
 GW8_IMAGE=
+GW8_DIR="gw8"
 ADDS=
 
 __parse_config_yaml() {
@@ -137,6 +138,7 @@ __set_variables() {
   GW8_IMAGE=$gw8_image
 
   GW8_TZ=$gw8_timezone
+  GW8_DIR=$gw8_dir
   PARENT_INSTANCE_NAME=$gw8_parent_instance_name
   CHILD_INSTANCE_NAME=$gw8_child_instance_name
 }
@@ -157,8 +159,9 @@ __extract_gw8_image() {
     fi
   done
 
-  mkdir gw8
-  if ! cd gw8; then
+  mkdir "$GW8_DIR"
+
+  if ! cd "$GW_DIR"; then
     echo "gw8 directory doesn't exist"
     exit 1
   fi

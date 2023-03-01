@@ -9,3 +9,4 @@ gw8:
   parent_instance_name:
   child_instance_name:
   timezone: America/Denver
+  dir: gw8

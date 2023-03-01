@@ -22,6 +22,7 @@ $ ./install.sh
     • gw8.parent_instance_name - name of the GW8 parent (for PMC installation only)
     • gw8.parent_instance_name - name of the GW8 instance (for PMC installation only)
     • gw8.timezone - timezone to use for GW8 instance
+    • gw8.dir - directory to store the gw8 folder with configuration files
     
     • docker.user - DockerHub username to pull necessary images                         ! required
     • docker.password - DockerHub password to pull necessary images                     ! required
@@ -41,6 +42,7 @@ gw8:
   parent_instance_name:
   child_instance_name:
   timezone: America/Denver
+  dir: gw8
 ```
 
 #### Overrides

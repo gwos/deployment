@@ -7,6 +7,7 @@ GW8_INSTANCE_NAME=
 GW8_IMAGE=
 GW8_DIR="gw8"
 ADDS=
+ALPINE_VERSION=3.11
 
 __parse_config_yaml() {
   local prefix=$2
@@ -136,6 +137,10 @@ __set_variables() {
     exit 1
   fi
   GW8_IMAGE=$gw8_image
+
+  if [[ "$gw8_alpine_version" != "" ]]; then
+    ALPINE_VERSION=$gw8_alpine_version
+  fi
 
   GW8_TZ=$gw8_timezone
   GW8_DIR=$gw8_dir

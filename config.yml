@@ -10,3 +10,4 @@ gw8:
   child_instance_name:
   timezone: America/Denver
   dir: gw8
+  alpine_version: 3.11

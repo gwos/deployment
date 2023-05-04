@@ -166,7 +166,7 @@ __extract_gw8_image() {
 
   mkdir "$GW8_DIR"
 
-  if ! cd "$GW_DIR"; then
+  if ! cd "$GW8_DIR"; then
     echo "gw8 directory doesn't exist"
     exit 1
   fi
